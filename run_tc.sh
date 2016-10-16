@@ -97,6 +97,17 @@ function add() {
     $TC filter add dev $IF protocol ip prio 1 u32 match ip sport $1 0xffff flowid 1:$2
 }
 
+# $1 is the target's port, $2 is the rule.
+function remove() {
+    if [[ !((-n $1)) || !((-n $2)) ]]; then
+        echo "  $NAME remove usage: remove TARGET_PORT RULE_NUM"
+        echo "      example: $NAME remove 8080 1"
+        exit 1
+    fi
+
+    $TC filter delete dev $IF protocol ip prio 1 u32 match ip sport $1 0xffff flowid 1:$2
+}
+
 function stop() {
     $TC qdisc del dev $IF root
 }
@@ -127,6 +138,13 @@ case "$1" in
     echo "done"
     ;;
 
+  remove)
+
+    echo "Removing target ..."
+    remove $2 $3
+    echo "done"
+    ;;
+
   stop)
 
     echo -n "Stopping traffic control: "
@@ -151,7 +169,7 @@ case "$1" in
   *)
 
     pwd=$(pwd)
-    echo "Usage: $(/usr/bin/dirname $pwd)/tc.bash {start|add|stop|restart|show}"
+    echo "Usage: $(/usr/bin/dirname $pwd)/tc.bash {start|add|remove|stop|restart|show}"
     ;;
 
 esac
