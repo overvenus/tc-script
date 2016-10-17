@@ -122,6 +122,8 @@ function restart() {
 
 function show() {
     $TC -s qdisc ls dev $IF
+    echo
+    $TC -s filter ls dev $IF
 }
 
 case "$1" in
