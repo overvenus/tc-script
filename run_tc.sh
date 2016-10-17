@@ -107,7 +107,7 @@ function remove() {
     fi
 
     $TC filter delete dev $IF protocol ip prio 1 u32 match ip sport $1 0xffff flowid 1:$2
-    $TC filter delete dev $IF protocol ip prio 1 u32 match ip dport $1 0xffff flowid 1:$2
+    #$TC filter delete dev $IF protocol ip prio 1 u32 match ip dport $1 0xffff flowid 1:$2
 }
 
 function stop() {
