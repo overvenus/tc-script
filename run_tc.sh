@@ -22,7 +22,7 @@ function rules() {
     # distribution, but no packet lost.
     #
     # It is useful to create a struggler.
-    $TC qdisc add dev eth0 parent 1:1 handle 10: netem delay 300ms 1000ms distribution normal
+    $TC qdisc add dev eth0 parent 1:1 handle 10: netem delay 250ms 750ms distribution normal
 
     # This causes the random number generator to be less random and can be used
     # to emulate packet burst losses.
@@ -95,6 +95,7 @@ function add() {
     fi
 
     $TC filter add dev $IF protocol ip prio 1 u32 match ip sport $1 0xffff flowid 1:$2
+    $TC filter add dev $IF protocol ip prio 1 u32 match ip dport $1 0xffff flowid 1:$2
 }
 
 # $1 is the target's port, $2 is the rule.
@@ -106,6 +107,7 @@ function remove() {
     fi
 
     $TC filter delete dev $IF protocol ip prio 1 u32 match ip sport $1 0xffff flowid 1:$2
+    $TC filter delete dev $IF protocol ip prio 1 u32 match ip dport $1 0xffff flowid 1:$2
 }
 
 function stop() {
